@@ -23,13 +23,6 @@ function showMenuBar() {
   });
 }
 
-function openPopup() {
-  let popup = document.getElementById("popupOverlay");
-  document.getElementById("openPopupBtn").addEventListener("click", () => {
-    popup.style.display = "block";
-  });
-}
-
 function openModal(id) {
   let popup = document.getElementById(id);
   const modal = new bootstrap.Modal(popup);
@@ -52,12 +45,8 @@ function openConfirmDeletePopup(id) {
 }
 
 function openConfirmDocDeletePopup(id) {
+  deleteDocId = id; // Store the id of the document to be deleted
   openModal("deleteMyDocument");
-}
-
-function closePopup(overlayId) {
-  let popup = document.getElementById(overlayId);
-  popup.style.display = "none";
 }
 
 function redirect(path) {
