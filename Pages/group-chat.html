@@ -14,8 +14,9 @@
   <div id="menu-bar"></div>
   <div class="container d-flex flex-column mb-3">
     <h1 class="text-center p-2">Group Chat</h1>
-    <div class="p-2" id="chat-box" ></div>
+    <div class="p-2" id="chat-box"></div>
     <div class="input-group p-2">
+      <span class="input-group-text" id="current_user_chatting"></span>
       <input rows="1" type="text" class="form-control" placeholder="Type your message here"
         aria-label="Message Input Area" id="messageInput" />
       <button class="btn btn-outline-primary" type="button" onClick="sendMessage()">

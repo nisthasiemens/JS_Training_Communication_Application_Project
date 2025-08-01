@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="../styles.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-  <title>Communications Application</title>
+  <title>Manage Users</title>
 </head>
 
 <body>
@@ -24,10 +24,10 @@
     </table>
   </div>
   <div id="editUser" class="page" style="display: none;">
-    
+
 
     <form class="edit-user-form" action="manage-users.html" method="get" onsubmit="validateEditUserForm(event)">
-      
+
       <div class="mb-3 row">
         <h1 class="ms-4">Edit User Information</h1>
       </div>
@@ -58,7 +58,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm User Deletion</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="adjustHrefLink('#delete')"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            onclick="adjustHrefLink('#delete')"></button>
         </div>
         <div class="modal-body">
           <div class="d-flex align-items-center">

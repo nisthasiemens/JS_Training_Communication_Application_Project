@@ -7,13 +7,11 @@ let userEditedIsCurrent = false;
 let deleteSharedUserId = null;
 let deleteSharedUploadId = null;
 
-function showMenuBar() {
+async function showMenuBar() {
   const menuBar = document.getElementById("menu-bar");
-  fetch("./menu-bar.html")
-    .then((response) => response.text())
-    .then((menuHtml) => {
-      menuBar.innerHTML = menuHtml;
-    });
+  const response = await fetch("./menu-bar.html");
+  const menuHtml = await response.text();
+  menuBar.innerHTML = menuHtml;
 
   const currentPage = window.location.pathname.split("/").pop();
   document.querySelectorAll(".menu-bar_item").forEach((item) => {
@@ -27,7 +25,6 @@ function openModal(id) {
   let popup = document.getElementById(id);
   const modal = new bootstrap.Modal(popup);
   modal.show();
-
 }
 
 function closeModal(id) {
@@ -798,6 +795,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const currentUserEmail = JSON.parse(storedCurrentUser).email;
   if (element) {
     element.innerHTML = "<b>Welcome!</b> " + currentUserEmail;
+  }
+
+  let elementChat = document.getElementById("current_user_chatting");
+  if (elementChat) {
+    elementChat.innerHTML = JSON.parse(storedCurrentUser).userName + ":";
   }
 
   const params = new URLSearchParams(window.location.search);
