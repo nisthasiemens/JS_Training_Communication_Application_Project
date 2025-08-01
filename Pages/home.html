@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communications Application - Home</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-secondary-subtle">
+    
+    <div id="user" class="row mb-3">
+        <h1 class="mt-5">Welcome to the Users Module</h1>
+        <h3 class="mt-5">Existing Users</h3>
+        <button onclick="redirect('login.html')" class="btn btn-primary mt-2 col-md-3">Login</button>
+        <h3 class="mt-5">New Users</h3>
+        <button onclick="redirect('register.html')" class="btn btn-primary mt-2 col-md-3">Register</button>
+    </div>
+    <div class="text-center" id="logoutMessage"></div>
+    <script src="../script.js"></script>
+</body>
+</html>

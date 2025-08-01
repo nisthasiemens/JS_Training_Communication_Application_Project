@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../styles.css" />
+
+    <title>Communications Application</title>
+  </head>
+
+  <body>
+    <div id="menu-bar"></div>
+    <div id="documentManagement" class="page active" style="display: block;">
+      <h1>My Uploads</h1>
+      <table
+        id="myUploadsTable"
+        class="table table-hover table-striped table-bordered"
+      >
+        <tr class="table-dark">
+          <th>Label</th>
+          <th>File Name</th>
+          <th>Action</th>
+        </tr>
+        <tbody id="myUploadsTableBody"></tbody>
+      </table>
+      <h1>Shared Uploads</h1>
+      <table
+        id="sharedUploadsTable"
+        class="table table-hover table-striped table-bordered"
+      >
+        <tr class="table-dark">
+          <th>Label</th>
+          <th>File Name</th>
+          <th>Shared By</th>
+        </tr>
+        <tbody id="sharedUploadsTableBody"></tbody>
+      </table>
+
+      <!-- Button trigger modal -->
+      <button
+        class="ms-2 btn btn-primary"
+        data-bs-toggle="modal"
+        onClick="openModal('upload-popup')"
+      >
+        Upload
+      </button>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="upload-popup"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Upload</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3 row">
+                <label class="col-sm-4 col-form-label">File Description</label>
+                <div class="col-sm-8">
+                  <input id="fileDesc" type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label class="col-sm-4 col-form-label">File Upload</label>
+                <div class="col-sm-8">
+                  <input
+                    id="uploadFileInput"
+                    type="file"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                onclick="closeModal('popupOverlay')"
+                class="btn btn-secondary cancel-btn"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onclick="uploadFile()"
+                class="btn btn-primary upload-btn"
+              >
+                Upload Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="editMyDocument" class="page" style="display: none;">
+      <form
+        class="edit-document-form"
+        action="manage-documents.html"
+        method="get"
+        onsubmit="validateEditDocumentForm(event)"
+      >
+        <div class="mb-3 row">
+          <h1 class="ms-4">Edit Document</h1>
+        </div>
+        <div class="mb-3 row">
+          <label class="ms-4 col-sm-2 col-form-label">File description</label>
+          <div class="col-sm-3">
+            <input id="edit_fileDesc" type="text" class="form-control" />
+          </div>
+        </div>
+        <div class="mb-3 row">
+          <div class="col-sm-10 offset-sm-1">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              onclick="saveEditedDocument()"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary cancel-btn"
+              onclick="showPage('documentManagement'); adjustHrefLink('#edit')"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="deleteMyDocument"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Confirm File Deletion
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              onclick="adjustHrefLink('#delete')"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex align-items-center">
+              <img
+                class="mt-1"
+                src="../Icons/question.svg"
+                id="question_mark_img"
+                alt="confirm"
+              />
+              <p class="mb-0">Are you sure?</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              onclick="closeModal('deleteMyDocument'); adjustHrefLink('#delete')"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="confirmDeleteDocument(); adjustHrefLink('#delete')"
+            >
+              Ok
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sharedDocumentManagement" class="page" style="display: none;">
+      <h2 id="uploadSharingTableTitle"></h2>
+      <table
+        id="uploadSharingTable"
+        class="table table-hover table-striped table-bordered"
+      >
+        <tr class="table-dark">
+          <th>Shared User</th>
+          <th>Action</th>
+        </tr>
+        <tbody id="uploadSharingTableBody"></tbody>
+      </table>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="removeSharedUserPopup"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                onClick="adjustHrefLink('#share-remove')"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="d-flex align-items-center">
+                <img
+                  class="mt-1"
+                  src="../Icons/question.svg"
+                  id="question_mark_img"
+                  alt="confirm"
+                />
+                <p class="mb-0">Are you sure?</p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onclick="adjustHrefLink('#share-remove')"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="confirmRemoveSharedUser(); adjustHrefLink('#share-remove')"
+              >
+                Ok
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2>Add Sharing</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-group">
+            <select
+              class="form-select"
+              id="chooseUserForShareId"
+              aria-label=""
+            ></select>
+            <button
+              class="btn btn-outline-secondary"
+              id="addShareBtn"
+              type="button"
+              onclick="addShare()"
+            >
+              Add Share
+            </button>
+            <button
+              class="btn btn-outline-secondary"
+              id="goBackBtn"
+              type="button"
+              onclick="showPage('documentManagement'); restoreIds()"
+            >
+              Go Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", showMenuBar);
+      document.addEventListener("DOMContentLoaded", populateMyUploadsTable);
+      document.addEventListener("DOMContentLoaded", populateSharedUploadsTable);
+      
+    </script>
+  </body>
+</html>

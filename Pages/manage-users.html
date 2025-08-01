@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Communications Application</title>
+</head>
+
+<body>
+  <div id="menu-bar"></div>
+  <div id="userManagement" class="page active" style="display: block;">
+    <h1>Users</h1>
+    <table id="userTable" class="table table-hover table-striped table-bordered">
+      <tr class="table-dark">
+        <th>Name</th>
+        <th>User Email Id</th>
+        <th>Action</th>
+      </tr>
+      <tbody id="userTableBody"></tbody>
+    </table>
+  </div>
+  <div id="editUser" class="page" style="display: none;">
+    
+
+    <form class="edit-user-form" action="manage-users.html" method="get" onsubmit="validateEditUserForm(event)">
+      
+      <div class="mb-3 row">
+        <h1 class="ms-4">Edit User Information</h1>
+      </div>
+      <div class="mb-3 row">
+        <label class="ms-4 col-sm-2 col-form-label">Full Name</label>
+        <div class="col-sm-3">
+          <input id="edit_fullName" type="text" class="form-control" />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label class="ms-4 col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-3">
+          <input id="edit_email" type="text" class="form-control" />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <div class="col-sm-10 offset-sm-1">
+          <button type="submit" class="btn btn-primary" onclick="saveEditedUser()">Save</button>
+          <button type="button" class="btn btn-secondary cancel-btn"
+            onclick="showPage('userManagement'); adjustHrefLink('#edit')">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="deleteUserPopup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm User Deletion</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="adjustHrefLink('#delete')"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex align-items-center">
+            <img class="mt-1" src="../Icons/question.svg" id="question_mark_img" alt="confirm" />
+            <p class="mb-0">Are you sure you want to delete this user?</p>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            onclick="closeModal('deleteUserPopup'); adjustHrefLink('#delete')">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary"
+            onclick="confirmDeleteUser(); adjustHrefLink('#delete')">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../script.js"></script>
+  <script>
+
+    document.addEventListener("DOMContentLoaded", showMenuBar);
+    document.addEventListener("DOMContentLoaded", showPage("userManagement"));
+    document.addEventListener("DOMContentLoaded", populateUserTable);
+  </script>
+</body>
+
+</html>
