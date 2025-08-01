@@ -1,3 +1,4 @@
+// Global variables to track user and document operations
 let deleteUserId = null;
 let editUserId = null;
 let deleteDocId = null;
@@ -7,6 +8,10 @@ let userEditedIsCurrent = false;
 let deleteSharedUserId = null;
 let deleteSharedUploadId = null;
 
+/**
+ * Loads and displays the menu bar HTML content
+ * Highlights the current page in the menu
+ */
 async function showMenuBar() {
   const menuBar = document.getElementById("menu-bar");
   const response = await fetch("./menu-bar.html");
@@ -21,12 +26,20 @@ async function showMenuBar() {
   });
 }
 
+/**
+ * Opens a Bootstrap modal with the specified ID
+ * @param {string} id - The ID of the modal element to open
+ */
 function openModal(id) {
   let popup = document.getElementById(id);
   const modal = new bootstrap.Modal(popup);
   modal.show();
 }
 
+/**
+ * Closes a Bootstrap modal with the specified ID
+ * @param {string} id - The ID of the modal element to close
+ */
 function closeModal(id) {
   let popup = document.getElementById(id);
   const modal = bootstrap.Modal.getInstance(popup);
@@ -35,21 +48,38 @@ function closeModal(id) {
   }
 }
 
+/**
+ * Opens the delete user confirmation popup
+ * @param {number} id - The ID of the user to be deleted
+ */
 function openConfirmDeletePopup(id) {
   deleteUserId = id; // Store the id of the user to be deleted
 
   openModal("deleteUserPopup");
 }
 
+/**
+ * Opens the delete document confirmation popup
+ * @param {number} id - The ID of the document to be deleted
+ */
 function openConfirmDocDeletePopup(id) {
   deleteDocId = id; // Store the id of the document to be deleted
   openModal("deleteMyDocument");
 }
 
+/**
+ * Redirects the browser to the specified path
+ * @param {string} path - The URL path to redirect to
+ */
 function redirect(path) {
   window.location.href = path;
 }
 
+/**
+ * Shows a specific page by hiding all others and displaying the selected one
+ * Triggers data population for certain pages
+ * @param {string} pageId - The ID of the page element to display
+ */
 function showPage(pageId) {
   // Hide all pages
   document.querySelectorAll(".page").forEach((page) => {
@@ -76,6 +106,10 @@ function showPage(pageId) {
   }
 }
 
+/**
+ * Opens the edit user page and populates form with user data
+ * @param {number} id - The ID of the user to edit
+ */
 function openEditUserPage(id) {
   editUserId = id;
 
@@ -95,6 +129,10 @@ function openEditUserPage(id) {
   showPage("editUser");
 }
 
+/**
+ * Opens the edit document page and populates form with document data
+ * @param {number} id - The ID of the document to edit
+ */
 function openEditDocumentPage(id) {
   editDocId = id;
 
@@ -110,6 +148,10 @@ function openEditDocumentPage(id) {
   showPage("editMyDocument");
 }
 
+/**
+ * Opens the document sharing page for a specific document
+ * @param {number} id - The ID of the document to share
+ */
 function openShareDocumentPage(id) {
   shareDocId = id;
 
@@ -127,6 +169,10 @@ function openShareDocumentPage(id) {
   showPage("sharedDocumentManagement");
 }
 
+/**
+ * Saves the edited user data to localStorage
+ * Updates current user if the edited user is the logged-in user
+ */
 function saveEditedUser() {
   const updatedName = document.getElementById("edit_fullName").value.trim();
   const updatedEmail = document.getElementById("edit_email").value.trim();
@@ -166,6 +212,9 @@ function saveEditedUser() {
   }
 }
 
+/**
+ * Saves the edited document description to localStorage
+ */
 function saveEditedDocument() {
   const updatedFileDesc = document.getElementById("edit_fileDesc").value.trim();
   if (editDocId !== null) {
@@ -193,6 +242,10 @@ function saveEditedDocument() {
   }
 }
 
+/**
+ * Validates the registration form and creates a new user account
+ * @param {Event} event - The form submission event
+ */
 function validateRegisterForm(event) {
   event.preventDefault();
   const form = document.querySelector(".register-form");
@@ -228,6 +281,13 @@ function validateRegisterForm(event) {
   }
 }
 
+/**
+ * Adds a new user to localStorage
+ * @param {string} userName - The user's name
+ * @param {string} email - The user's email
+ * @param {string} password - The user's password
+ * @returns {boolean} True if user was added successfully, false if user already exists
+ */
 function addNewUserData(userName, email, password) {
   const userData = {
     id: Date.now() + Math.floor(Math.random() * 10000), // unique number
@@ -245,6 +305,10 @@ function addNewUserData(userName, email, password) {
   return true;
 }
 
+/**
+ * Validates the login form and authenticates the user
+ * @param {Event} event - The form submission event
+ */
 function validateLoginForm(event) {
   event.preventDefault();
   const form = document.querySelector(".login-form");
@@ -283,8 +347,10 @@ function validateLoginForm(event) {
   }
 }
 
+/**
+ * Populates the user management table with all registered users
+ */
 function populateUserTable() {
-  //document.getElementById("deleteUserPopup").style.display = "none";
   const tableBody = document.getElementById("userTableBody");
   const users = JSON.parse(localStorage.getItem("users")) || [];
   if (!tableBody) {
@@ -333,6 +399,9 @@ function populateUserTable() {
   });
 }
 
+/**
+ * Cancels the current operation and resets the browser history
+ */
 function cancelOperation() {
   // Reset hash
   history.pushState(
@@ -342,6 +411,10 @@ function cancelOperation() {
   );
 }
 
+/**
+ * Validates the edit user form (currently incomplete implementation)
+ * @param {Event} event - The form submission event
+ */
 function validateEditUserForm(event) {
   event.preventDefault();
   const form = document.querySelector("edit-user-form");
@@ -366,6 +439,10 @@ function validateEditUserForm(event) {
   userData;
 }
 
+/**
+ * Validates the edit document form (currently incomplete implementation)
+ * @param {Event} event - The form submission event
+ */
 function validateEditDocumentForm(event) {
   event.preventDefault();
   const form = document.querySelector("edit-document-form");
@@ -387,6 +464,9 @@ function validateEditDocumentForm(event) {
   uploadData;
 }
 
+/**
+ * Confirms and executes the deletion of a user
+ */
 function confirmDeleteUser() {
   if (deleteUserId !== null) {
     const users = JSON.parse(localStorage.getItem("users")) || [];
@@ -401,6 +481,9 @@ function confirmDeleteUser() {
   }
 }
 
+/**
+ * Confirms and executes the deletion of a document
+ */
 function confirmDeleteDocument() {
   if (deleteDocId !== null) {
     const uploads = JSON.parse(localStorage.getItem("uploads")) || [];
@@ -416,6 +499,9 @@ function confirmDeleteDocument() {
   }
 }
 
+/**
+ * Handles file upload by reading the file and storing it in localStorage
+ */
 function uploadFile() {
   const fileDescription = document.getElementById("fileDesc").value;
   const fileInput = document.getElementById("uploadFileInput");
@@ -439,6 +525,13 @@ function uploadFile() {
   }
 }
 
+/**
+ * Adds a new document to localStorage
+ * @param {string} fileDescription - Description of the file
+ * @param {string} fileName - Name of the file
+ * @param {string} fileData - Base64 encoded file data
+ * @returns {boolean} True if document was saved successfully, false otherwise
+ */
 function addNewDocument(fileDescription, fileName, fileData) {
   try {
     const upload = {
@@ -462,6 +555,9 @@ function addNewDocument(fileDescription, fileName, fileData) {
   }
 }
 
+/**
+ * Populates the table with documents uploaded by the current user
+ */
 function populateMyUploadsTable() {
   const tableBody = document.getElementById("myUploadsTableBody");
   const allUploads = JSON.parse(localStorage.getItem("uploads")) || [];
@@ -534,6 +630,9 @@ function populateMyUploadsTable() {
   });
 }
 
+/**
+ * Populates the table with documents shared with the current user
+ */
 function populateSharedUploadsTable() {
   const tableBody = document.getElementById("sharedUploadsTableBody");
   const allUploads = JSON.parse(localStorage.getItem("uploads")) || [];
@@ -581,6 +680,9 @@ function populateSharedUploadsTable() {
   });
 }
 
+/**
+ * Populates the dropdown with users available for sharing documents
+ */
 function populateChooseUserForShare() {
   const dropdown = document.getElementById("chooseUserForShareId");
   if (!dropdown) return;
@@ -598,6 +700,9 @@ function populateChooseUserForShare() {
     });
 }
 
+/**
+ * Adds a new share for the selected document with the chosen user
+ */
 function addShare() {
   const addShareBtn = document.getElementById("addShareBtn");
   if (!addShareBtn) return;
@@ -616,6 +721,10 @@ function addShare() {
   addNewShareData(selectedUserForShare);
 }
 
+/**
+ * Adds sharing data for a document with a specific user
+ * @param {Object} sharedWithUser - The user object to share the document with
+ */
 function addNewShareData(sharedWithUser) {
   const uploads = JSON.parse(localStorage.getItem("uploads")) || [];
   const upload = uploads.find((upload) => upload.id === shareDocId);
@@ -642,6 +751,9 @@ function addNewShareData(sharedWithUser) {
   populateUploadSharingTable();
 }
 
+/**
+ * Populates the table showing users who have access to a shared document
+ */
 function populateUploadSharingTable() {
   const tableBody = document.getElementById("uploadSharingTableBody");
   const uploads = JSON.parse(localStorage.getItem("uploads")) || [];
@@ -687,12 +799,20 @@ function populateUploadSharingTable() {
   });
 }
 
+/**
+ * Opens the confirmation popup for removing a shared user from a document
+ * @param {number} uploadId - The ID of the upload
+ * @param {number} userId - The ID of the user to remove from sharing
+ */
 function openConfirmRemoveSharedUserPopup(uploadId, userId) {
   deleteSharedUserId = userId; // Store the id of the shared user to be removed
   deleteSharedUploadId = uploadId; // Store the id of the upload for which the shared user is to be removed
   openModal("removeSharedUserPopup");
 }
 
+/**
+ * Confirms and executes the removal of a shared user from a document
+ */
 function confirmRemoveSharedUser() {
   if (deleteSharedUserId !== null && deleteSharedUploadId !== null) {
     const uploads = JSON.parse(localStorage.getItem("uploads")) || [];
@@ -717,6 +837,10 @@ function confirmRemoveSharedUser() {
   }
 }
 
+/**
+ * Adjusts the current URL by removing a specified string from the href
+ * @param {string} stringToRemove - The string to remove from the current URL
+ */
 function adjustHrefLink(stringToRemove) {
   const currentHref = window.location.href;
   if (currentHref.includes(stringToRemove)) {
@@ -725,11 +849,18 @@ function adjustHrefLink(stringToRemove) {
   }
 }
 
+/**
+ * Resets sharing-related global variables and cancels current operation
+ */
 function restoreIds() {
   shareDocId = null;
   cancelOperation();
 }
 
+/**
+ * Gets the current date and time in formatted string
+ * @returns {string} Formatted timestamp string [YYYY-MM-DD HH-MM-SS]
+ */
 function getCurrentDateTime() {
   const now = new Date();
 
@@ -744,6 +875,10 @@ function getCurrentDateTime() {
   return `[${year}-${month}-${day} ${hours}-${minutes}-${seconds}]`;
 }
 
+/**
+ * Updates the chat history with a new message from the current user
+ * @param {string} message - The message to add to chat history
+ */
 updateChat = function (message) {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -760,6 +895,9 @@ updateChat = function (message) {
   localStorage.setItem("chatHistory", JSON.stringify(chatHistoryData));
 };
 
+/**
+ * Refreshes the chat box display with all messages from chat history
+ */
 function refreshChatBox() {
   const chatBox = document.getElementById("chat-box");
   chatBox.innerHTML = ""; // Clear the chat box
@@ -776,6 +914,9 @@ function refreshChatBox() {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+/**
+ * Sends a new message to the chat and refreshes the display
+ */
 function sendMessage() {
   const messageInput = document.getElementById("messageInput");
   const message = messageInput.value.trim();
@@ -786,6 +927,10 @@ function sendMessage() {
   }
 }
 
+/**
+ * Initializes the page when DOM content is loaded
+ * Sets up current user display and handles logout status
+ */
 document.addEventListener("DOMContentLoaded", function () {
   let element = document.getElementById("current_user");
   const storedCurrentUser = localStorage.getItem("currentUser");
